@@ -8,6 +8,7 @@ public class FullstackFoodAppReactSpringbootApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FullstackFoodAppReactSpringbootApplication.class, args);
+		System.out.println("\nSERVER BACKEND IS RUNNING");
 	}
 
 }
