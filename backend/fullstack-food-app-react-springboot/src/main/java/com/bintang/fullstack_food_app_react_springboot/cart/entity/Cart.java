@@ -3,6 +3,8 @@ package com.bintang.fullstack_food_app_react_springboot.cart.entity;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.entity.User;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "carts")
 public class Cart {
