@@ -1,19 +1,17 @@
-package com.bintang.fullstack_food_app_react_springboot.email_notification.entity;
+package com.bintang.fullstack_food_app_react_springboot.email_notification.dtos;
 
 import com.bintang.fullstack_food_app_react_springboot.enums.NotificationType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Builder
-@Table(name = "notifications")
-public class Notification {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class NotificationDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "recipient is required")
@@ -21,26 +19,24 @@ public class Notification {
 
     private String subject;
 
-    @Lob
     private String body;
 
-    @Enumerated(EnumType.STRING)
     private NotificationType type;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     private boolean isHtml;
 
-    public Notification() {
-    }
-
-    public Notification(Long id, String recipient, String subject, String body, NotificationType type, boolean isHtml) {
+    public NotificationDto(Long id, String recipient, String subject, String body, NotificationType type, boolean isHtml) {
         this.id = id;
         this.recipient = recipient;
         this.subject = subject;
         this.body = body;
         this.type = type;
         this.isHtml = isHtml;
+    }
+
+    public NotificationDto() {
     }
 
     public Long getId() {
@@ -57,6 +53,14 @@ public class Notification {
 
     public void setRecipient(String recipient) {
         this.recipient = recipient;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getBody() {
@@ -85,13 +89,5 @@ public class Notification {
 
     public void setHtml(boolean html) {
         isHtml = html;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
     }
 }
