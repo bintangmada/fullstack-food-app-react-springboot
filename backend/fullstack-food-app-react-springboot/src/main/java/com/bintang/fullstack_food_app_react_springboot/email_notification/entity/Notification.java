@@ -8,7 +8,6 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Entity
-@Builder
 @Table(name = "notifications")
 public class Notification {
 
@@ -34,12 +33,13 @@ public class Notification {
     public Notification() {
     }
 
-    public Notification(Long id, String recipient, String subject, String body, NotificationType type, boolean isHtml) {
+    public Notification(Long id, String recipient, String subject, String body, NotificationType type, LocalDateTime createdAt, boolean isHtml) {
         this.id = id;
         this.recipient = recipient;
         this.subject = subject;
         this.body = body;
         this.type = type;
+        this.createdAt = createdAt;
         this.isHtml = isHtml;
     }
 

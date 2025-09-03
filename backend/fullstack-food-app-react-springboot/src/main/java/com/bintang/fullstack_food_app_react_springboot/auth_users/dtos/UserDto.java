@@ -1,9 +1,12 @@
 package com.bintang.fullstack_food_app_react_springboot.auth_users.dtos;
 
+import com.bintang.fullstack_food_app_react_springboot.role.dtos.RoleDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)

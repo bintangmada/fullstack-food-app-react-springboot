@@ -1,6 +1,9 @@
 package com.bintang.fullstack_food_app_react_springboot.category.entity;
 
+import com.bintang.fullstack_food_app_react_springboot.menu.entity.Menu;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "categories")

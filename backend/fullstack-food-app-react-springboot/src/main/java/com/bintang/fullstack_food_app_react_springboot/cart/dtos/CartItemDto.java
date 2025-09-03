@@ -1,5 +1,6 @@
 package com.bintang.fullstack_food_app_react_springboot.cart.dtos;
 
+import com.bintang.fullstack_food_app_react_springboot.menu.dtos.MenuDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 

@@ -1,6 +1,8 @@
 package com.bintang.fullstack_food_app_react_springboot.menu.entity;
 
 import com.bintang.fullstack_food_app_react_springboot.category.entity.Category;
+import com.bintang.fullstack_food_app_react_springboot.order.entity.OrderItem;
+import com.bintang.fullstack_food_app_react_springboot.review.entity.Review;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
