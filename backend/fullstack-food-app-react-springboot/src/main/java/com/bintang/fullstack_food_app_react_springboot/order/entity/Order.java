@@ -3,6 +3,7 @@ package com.bintang.fullstack_food_app_react_springboot.order.entity;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.entity.User;
 import com.bintang.fullstack_food_app_react_springboot.enums.OrderStatus;
 import com.bintang.fullstack_food_app_react_springboot.enums.PaymentStatus;
+import com.bintang.fullstack_food_app_react_springboot.payment.entity.Payment;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

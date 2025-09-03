@@ -1,5 +1,6 @@
 package com.bintang.fullstack_food_app_react_springboot.cart.entity;
 
+import com.bintang.fullstack_food_app_react_springboot.menu.entity.Menu;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -17,7 +18,7 @@ public class CartItem {
     private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = menu_id)
+    @JoinColumn(name = "menu_id")
     private Menu menu;
 
     private int quantity;

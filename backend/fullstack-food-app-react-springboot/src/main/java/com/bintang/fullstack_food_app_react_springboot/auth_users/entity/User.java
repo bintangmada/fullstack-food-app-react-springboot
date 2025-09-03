@@ -1,6 +1,10 @@
 package com.bintang.fullstack_food_app_react_springboot.auth_users.entity;
 
 import com.bintang.fullstack_food_app_react_springboot.cart.entity.Cart;
+import com.bintang.fullstack_food_app_react_springboot.order.entity.Order;
+import com.bintang.fullstack_food_app_react_springboot.payment.entity.Payment;
+import com.bintang.fullstack_food_app_react_springboot.review.entity.Review;
+import com.bintang.fullstack_food_app_react_springboot.role.entity.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
