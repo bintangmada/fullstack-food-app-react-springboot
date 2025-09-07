@@ -39,10 +39,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(PaymentProcessingException.class)
     public ResponseEntity<Response<?>> handlePaymentProcessingException(PaymentProcessingException ex){
         Response<?> response = Response.builder()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .statusCode(HttpStatus.BAD_GATEWAY.value())
                 .message(ex.getMessage())
                 .build();
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(UnauthorizedAccessException.class)
