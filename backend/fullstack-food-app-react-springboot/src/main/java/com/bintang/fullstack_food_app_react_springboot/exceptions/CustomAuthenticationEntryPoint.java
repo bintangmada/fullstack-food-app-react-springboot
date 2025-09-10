@@ -33,4 +33,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 
+    public void commence(HttpServletRequest request, HttpServletResponse response, javax.naming.AuthenticationException authenticationException) {
+    }
 }
