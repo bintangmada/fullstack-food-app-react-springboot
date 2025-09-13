@@ -3,12 +3,16 @@ package com.bintang.fullstack_food_app_react_springboot.email_notification.entit
 import com.bintang.fullstack_food_app_react_springboot.enums.NotificationType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notifications")
+@Data
 @Builder
 public class Notification {
 

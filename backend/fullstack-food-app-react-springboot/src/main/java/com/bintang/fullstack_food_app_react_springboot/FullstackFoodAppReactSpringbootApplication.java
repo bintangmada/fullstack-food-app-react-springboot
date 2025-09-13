@@ -26,7 +26,7 @@ public class FullstackFoodAppReactSpringbootApplication {
 	CommandLineRunner runner(){
 		return args -> {
 			NotificationDto notificationDto = NotificationDto.builder()
-					.recipient("your_email_recipient")
+					.recipient("abc@gmail.com")
 					.subject("EMAIL TESTING")
 					.body("Hallo from the other world")
 					.type(NotificationType.EMAIL)

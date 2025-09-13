@@ -30,7 +30,7 @@ public class SecurityFilter {
 
 
     @Bean
-    public SecurityFilterChain securityFilter(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
