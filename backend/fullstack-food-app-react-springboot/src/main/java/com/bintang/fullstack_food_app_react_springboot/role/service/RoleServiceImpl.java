@@ -78,7 +78,7 @@ public class RoleServiceImpl implements RoleService {
         List<RoleDto> listRoleDto = listRoles
                 .stream()
                 .map(r -> modelMapper.map(r, RoleDto.class))
-                .collect(Collectors.toList());
+                .toList();
 
         return Response.<List<RoleDto>>builder()
                 .message("All role")
@@ -89,6 +89,15 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Response<?> deleteRole(Long roleId) {
-        return null;
+        if(roleRepository.findById(roleId) == null || !roleRepository.existsById(roleId)){
+            throw new NotFoundException("Role is not found");
+        }
+
+        roleRepository.deleteById(roleId);
+
+        return Response.builder()
+                .message("Role deleted successfully")
+                .statusCode(HttpStatus.OK.value())
+                .build();
     }
 }
