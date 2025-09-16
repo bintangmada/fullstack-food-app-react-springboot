@@ -16,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -63,7 +65,26 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Response<List<RoleDto>> getAllRoles() {
-        return null;
+        List<Role> listRoles = roleRepository.findAll();
+
+        if(listRoles.isEmpty() || listRoles == null){
+            return Response.<List<RoleDto>>builder()
+                    .message("Role is empty")
+                    .statusCode(HttpStatus.NO_CONTENT.value())
+                    .data(Collections.EMPTY_LIST)
+                    .build();
+        }
+
+        List<RoleDto> listRoleDto = listRoles
+                .stream()
+                .map(r -> modelMapper.map(r, RoleDto.class))
+                .collect(Collectors.toList());
+
+        return Response.<List<RoleDto>>builder()
+                .message("All role")
+                .statusCode(HttpStatus.OK.value())
+                .data(listRoleDto)
+                .build();
     }
 
     @Override
