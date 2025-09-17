@@ -1,13 +1,7 @@
 package com.bintang.fullstack_food_app_react_springboot;
 
-import com.bintang.fullstack_food_app_react_springboot.email_notification.dtos.NotificationDto;
-import com.bintang.fullstack_food_app_react_springboot.email_notification.services.NotificationService;
-import com.bintang.fullstack_food_app_react_springboot.enums.NotificationType;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
