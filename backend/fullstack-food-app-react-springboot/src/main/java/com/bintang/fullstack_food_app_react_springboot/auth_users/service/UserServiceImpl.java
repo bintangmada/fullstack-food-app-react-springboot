@@ -4,10 +4,15 @@ import com.bintang.fullstack_food_app_react_springboot.auth_users.dtos.UserDto;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.entity.User;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.repository.UserRepository;
 import com.bintang.fullstack_food_app_react_springboot.email_notification.services.NotificationService;
+import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
 import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,12 +31,26 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getCurrentLoggedInUser() {
-        return null;
+
+        // AMBIL EMAIL DARI SECURITY CONTEXT HOLDER
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Email not found"));
+
     }
 
     @Override
     public Response<List<UserDto>> getAllUsers() {
-        return null;
+        log.info("insife getAllUsers()");
+        List<User> listUser = userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        List<UserDto> listUserDto = modelMapper.map(listUser, new TypeToken<List<UserDto>>(){}.getType());
+
+        return Response.<List<UserDto>>builder()
+                .message("All user are retrieved")
+                .statusCode(HttpStatus.OK.value())
+                .data(listUserDto)
+                .build();
     }
 
     @Override
