@@ -3,7 +3,6 @@ package com.bintang.fullstack_food_app_react_springboot.email_notification.dtos;
 import com.bintang.fullstack_food_app_react_springboot.enums.NotificationType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
