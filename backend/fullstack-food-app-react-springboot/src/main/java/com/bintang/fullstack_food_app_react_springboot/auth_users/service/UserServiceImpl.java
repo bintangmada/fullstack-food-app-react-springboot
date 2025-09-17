@@ -55,7 +55,17 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Response<UserDto> getOwnAccountDetails() {
-        return null;
+        log.info("Inside getOwnAccountDetails()");
+        User currentUserLogin = getCurrentLoggedInUser();
+
+        UserDto currentUserLoginDto = modelMapper.map(currentUserLogin, UserDto.class);
+
+        return Response.<UserDto>builder()
+                .message("Own Account Details")
+                .statusCode(HttpStatus.OK.value())
+                .data(currentUserLoginDto)
+                .build();
+
     }
 
     @Override
