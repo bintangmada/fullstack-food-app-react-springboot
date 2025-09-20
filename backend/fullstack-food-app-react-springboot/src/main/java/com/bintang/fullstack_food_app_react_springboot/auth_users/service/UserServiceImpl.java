@@ -4,6 +4,8 @@ import com.bintang.fullstack_food_app_react_springboot.auth_users.dtos.UserDto;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.entity.User;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.repository.UserRepository;
 import com.bintang.fullstack_food_app_react_springboot.aws.AwsS3Service;
+import com.bintang.fullstack_food_app_react_springboot.email_notification.dtos.NotificationDto;
+import com.bintang.fullstack_food_app_react_springboot.email_notification.entity.Notification;
 import com.bintang.fullstack_food_app_react_springboot.email_notification.services.NotificationService;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.BadRequestException;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
@@ -125,6 +127,28 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Response<?> deactivateOwnAccount() {
-        return null;
+
+        log.info("inside deactive account");
+
+        User user = getCurrentLoggedInUser();
+
+        // deactive user
+        user.setActive(false);
+        userRepository.save(user);
+
+        // send email after deactivation
+        NotificationDto notificationDto = NotificationDto.builder()
+                .recipient(user.getEmail())
+                .subject("Account Deactivated")
+                .body("Your account has been deactivated. contact support if this is false")
+                .build();
+
+        notificationService.sendEmail(notificationDto);
+
+        return Response.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Account deactivated successfully")
+                .build();
+
     }
 }
