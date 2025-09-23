@@ -33,4 +33,15 @@ public class UserController {
         userDto.setImageFile(imageFile);
         return ResponseEntity.ok(userService.updateOwnAccount(userDto));
     }
+
+    @DeleteMapping("/deactivate")
+    public ResponseEntity<Response<?>>deactivateOwnAccount(){
+        return ResponseEntity.ok(userService.deactivateOwnAccount());
+    }
+
+    @GetMapping("/account")
+    public ResponseEntity<Response<?>> getOwnAccountDetails(){
+        return ResponseEntity.ok(userService.getOwnAccountDetails());
+    }
+
 }
