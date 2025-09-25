@@ -75,7 +75,19 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Response<CategoryDto> getCategoryById(Long categoryId) {
-        return null;
+
+        log.info("Inside getCategoryById()");
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Category does not exists"));
+
+        CategoryDto categoryDto = modelMapper.map(category, CategoryDto.class);
+
+        return Response.<CategoryDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Category updated successfully")
+                .data(categoryDto)
+                .build();
     }
 
     @Override
