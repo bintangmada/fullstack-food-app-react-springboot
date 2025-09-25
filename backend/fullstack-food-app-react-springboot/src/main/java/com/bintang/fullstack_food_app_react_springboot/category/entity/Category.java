@@ -2,11 +2,17 @@ package com.bintang.fullstack_food_app_react_springboot.category.entity;
 
 import com.bintang.fullstack_food_app_react_springboot.menu.entity.Menu;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "categories")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Category {
 
     @Id
@@ -20,46 +26,4 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Menu> menus;
-
-    public Category(Long id, String name, String description, List<Menu> menus) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.menus = menus;
-    }
-
-    public Category() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<Menu> getMenus() {
-        return menus;
-    }
-
-    public void setMenus(List<Menu> menus) {
-        this.menus = menus;
-    }
 }
