@@ -71,6 +71,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Response<List<CategoryDto>> getAllCategories() {
 
+        log.info("Inside getAllCategories()");
+
         List<Category> categories = categoryRepository.findAll();
 
         if(categories == null){
@@ -108,6 +110,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Response<?> deleteCategory(Long categoryId) {
+
+        log.info("Inside deleteCategory()");
 
         Category existingCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Category is not found"));
