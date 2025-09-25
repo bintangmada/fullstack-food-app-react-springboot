@@ -108,6 +108,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Response<?> deleteCategory(Long categoryId) {
-        return null;
+
+        Category existingCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Category is not found"));
+
+        categoryRepository.deleteById(categoryId);
+
+        return Response.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Category deleted successfully")
+                .build();
     }
 }
