@@ -70,7 +70,23 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Response<List<CategoryDto>> getAllCategories() {
-        return null;
+
+        List<Category> categories = categoryRepository.findAll();
+
+        if(categories == null){
+            throw new NotFoundException("categories is empty");
+        }
+
+        List<CategoryDto> categoryDtos = categories
+                .stream()
+                .map(category -> modelMapper.map(category, CategoryDto.class))
+                .toList();
+
+        return Response.<List<CategoryDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success get all categories")
+                .data(categoryDtos)
+                .build();
     }
 
     @Override
