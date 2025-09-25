@@ -3,10 +3,12 @@ package com.bintang.fullstack_food_app_react_springboot.category.service;
 import com.bintang.fullstack_food_app_react_springboot.category.dtos.CategoryDto;
 import com.bintang.fullstack_food_app_react_springboot.category.entity.Category;
 import com.bintang.fullstack_food_app_react_springboot.category.repository.CategoryRepository;
+import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
 import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.NotFound;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,7 +46,26 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Response<CategoryDto> updateCategory(CategoryDto categoryDto) {
-        return null;
+
+        log.info("inside updateCategory()");
+
+        Category category = categoryRepository.findById(categoryDto.getId())
+                .orElseThrow(() -> new NotFoundException("Category is not found"));
+
+        if(categoryDto.getName() != null && !categoryDto.getName().isEmpty()){
+            category.setName(categoryDto.getName());
+        }
+
+        if(categoryDto.getDescription() != null && !categoryDto.getDescription().isEmpty()){
+            category.setDescription(categoryDto.getDescription());
+        }
+
+        categoryRepository.save(category);
+
+        return Response.<CategoryDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Category updated successfully")
+                .build();
     }
 
     @Override
