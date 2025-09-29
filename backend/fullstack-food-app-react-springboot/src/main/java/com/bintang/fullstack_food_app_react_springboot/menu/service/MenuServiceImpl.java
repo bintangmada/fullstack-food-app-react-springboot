@@ -146,10 +146,18 @@ public class MenuServiceImpl implements MenuService {
         String imageUrl = menuToDelete.getImageUrl();
 
         // LANJUT LAGI
+        if(imageUrl != null && !imageUrl.isEmpty()){
+            String keyName = imageUrl.substring(imageUrl.lastIndexOf("/")+1);
+            awsS3Service.deleteFile("menus/"+keyName);
+            log.info("delete image from s3 : menus/"+keyName);
+        }
 
+        menuRepository.deleteById(menuId);
 
-
-        return null;
+        return Response.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("menu deleted successfully")
+                .build();
     }
 
     @Override
