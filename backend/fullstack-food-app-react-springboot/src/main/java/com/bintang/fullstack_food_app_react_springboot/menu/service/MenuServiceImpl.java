@@ -137,7 +137,18 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Response<?> deleteMenu(Long menuId) {
+
         log.info("Inside deleteMenu()");
+
+        Menu menuToDelete = menuRepository.findById(menuId)
+                .orElseThrow(() -> new NotFoundException("Menu is not found"));
+
+        String imageUrl = menuToDelete.getImageUrl();
+
+        // LANJUT LAGI
+
+
+
         return null;
     }
 
