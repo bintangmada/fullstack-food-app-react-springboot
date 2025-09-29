@@ -67,7 +67,17 @@ public class MenuServiceImpl implements MenuService{
 
     @Override
     public Response<MenuDto> updateMenu(MenuDto menuDto) {
+
         log.info("Inside updateMenu()");
+
+        Menu existingMenu = menuRepository.findById(menuDto.getId())
+                .orElseThrow(() -> new NotFoundException("Menu is not found"));
+
+        Category category = categoryRepository.findById(menuDto.getCategoryId())
+                .orElseThrow(() -> new NotFoundException("Menu is not found"));
+
+        // LANJUT LAGI
+
         return null;
     }
 
