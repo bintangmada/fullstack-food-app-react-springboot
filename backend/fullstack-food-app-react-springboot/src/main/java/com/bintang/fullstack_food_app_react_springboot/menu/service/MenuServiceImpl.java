@@ -23,12 +23,13 @@ import java.util.UUID;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MenuServiceImpl implements MenuService{
+public class MenuServiceImpl implements MenuService {
 
     private final MenuRepository menuRepository;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
     private final AwsS3Service awsS3Service;
+
     @Override
     public Response<MenuDto> addMenu(MenuDto menuDto) {
 
@@ -40,12 +41,12 @@ public class MenuServiceImpl implements MenuService{
         String imageUrl = null;
 
         MultipartFile imageFile = menuDto.getImageFile();
-        if(imageFile == null || imageFile.isEmpty()){
+        if (imageFile == null || imageFile.isEmpty()) {
             throw new BadRequestException("Menu image is required");
         }
 
-        String imageName = UUID.randomUUID() + "_"+imageFile.getOriginalFilename();
-        URL s3Url = awsS3Service.uploadFile("menus/"+imageName, imageFile);
+        String imageName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+        URL s3Url = awsS3Service.uploadFile("menus/" + imageName, imageFile);
         imageUrl = s3Url.toString();
 
         Menu menu = Menu.builder()
@@ -76,10 +77,41 @@ public class MenuServiceImpl implements MenuService{
         Category category = categoryRepository.findById(menuDto.getCategoryId())
                 .orElseThrow(() -> new NotFoundException("Menu is not found"));
 
-        // LANJUT LAGI
+        String imageUrl = existingMenu.getImageUrl();
+        MultipartFile imageFile = menuDto.getImageFile();
 
-        return null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+
+            // HAPUS IMAGE
+            if (imageUrl != null && !imageUrl.isEmpty()) {
+                String keyName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+                awsS3Service.deleteFile("menus/" + keyName);
+                log.info("Delete old menu image from s3");
+            }
+
+            // UPLOAD IMAGE
+            String imageName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+            URL newImageUrl = awsS3Service.uploadFile("menus/" + imageName, imageFile);
+            imageUrl = newImageUrl.toString();
+        }
+        if (menuDto.getName() != null && !menuDto.getName().isBlank()) existingMenu.setName(menuDto.getName());
+        if (menuDto.getDescription() != null && !menuDto.getDescription().isBlank())
+            existingMenu.setDescription(menuDto.getDescription());
+        if (menuDto.getPrice() != null) existingMenu.setPrice(menuDto.getPrice());
+
+        existingMenu.setImageUrl(imageUrl);
+        existingMenu.setCategory(category);
+
+        Menu updatedMenu = menuRepository.save(existingMenu);
+
+        return Response.<MenuDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Menu updated successfully")
+                .data(modelMapper.map(updatedMenu, MenuDto.class))
+                .build();
+
     }
+
 
     @Override
     public Response<MenuDto> getMenuById(Long menuId) {
