@@ -9,6 +9,7 @@ import com.bintang.fullstack_food_app_react_springboot.menu.dtos.MenuDto;
 import com.bintang.fullstack_food_app_react_springboot.menu.entity.Menu;
 import com.bintang.fullstack_food_app_react_springboot.menu.repository.MenuRepository;
 import com.bintang.fullstack_food_app_react_springboot.response.Response;
+import com.bintang.fullstack_food_app_react_springboot.review.dtos.ReviewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -116,7 +118,21 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Response<MenuDto> getMenuById(Long menuId) {
         log.info("Inside getMenuById()");
-        return null;
+
+        Menu existingMenu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new NotFoundException("Menu is not found"));
+
+        MenuDto menuDto = modelMapper.map(existingMenu, MenuDto.class);
+
+        if(menuDto.getReviews() != null){
+            menuDto.getReviews().sort(Comparator.comparing(ReviewDto::getId).reversed());
+        }
+
+        return Response.<MenuDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Menu retrieved successfully")
+                .data(menuDto)
+                .build();
     }
 
     @Override
