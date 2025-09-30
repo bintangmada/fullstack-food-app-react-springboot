@@ -10,6 +10,7 @@ import com.bintang.fullstack_food_app_react_springboot.menu.entity.Menu;
 import com.bintang.fullstack_food_app_react_springboot.menu.repository.MenuRepository;
 import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import com.bintang.fullstack_food_app_react_springboot.review.dtos.ReviewDto;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +37,7 @@ public class MenuServiceImpl implements MenuService {
     private final AwsS3Service awsS3Service;
 
     @Override
-    public Response<MenuDto> addMenu(MenuDto menuDto) {
+    public Response<MenuDto> createMenu(MenuDto menuDto) {
 
         log.info("Inside addMenu()");
 
@@ -185,8 +187,25 @@ public class MenuServiceImpl implements MenuService {
     }
 
     private Specification<Menu> buildSpecification(Long categoryId, String search){
-        return ((root, query, criteriaBuilder) -> {
-            return null;
+
+        return ((root, query, cb) -> {
+
+            List<Predicate> predicates = new ArrayList();
+
+            if(categoryId != null){
+                predicates.add(cb.equal(root.get("Category").get("id"), categoryId));
+            }
+
+            if(search != null && !search.isBlank()){
+                String searchTerm = "%"+search.toLowerCase()+"%";
+                predicates
+                        .add(cb.or(
+                        cb.like(cb.lower(root.get("name")), searchTerm),
+                        cb.like(cb.lower(root.get("description")),searchTerm)
+                ));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
         });
     }
 }
