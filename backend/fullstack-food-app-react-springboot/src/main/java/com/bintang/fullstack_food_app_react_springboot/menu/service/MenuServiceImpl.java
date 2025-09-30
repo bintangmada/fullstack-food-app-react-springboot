@@ -13,6 +13,8 @@ import com.bintang.fullstack_food_app_react_springboot.review.dtos.ReviewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -162,7 +164,29 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Response<List<MenuDto>> getMenus(Long categoryId, String search) {
+
         log.info("Inside getMenus()");
-        return null;
+
+        Specification<Menu> spec = buildSpecification(categoryId, search);
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+
+        List<Menu> menuList = menuRepository.findAll(spec, sort);
+
+        List<MenuDto> menuListDto = menuList
+                .stream()
+                .map(menu -> modelMapper.map(menu, MenuDto.class))
+                .toList();
+
+        return Response.<List<MenuDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Menu is retrieved")
+                .data(menuListDto)
+                .build();
+    }
+
+    private Specification<Menu> buildSpecification(Long categoryId, String search){
+        return ((root, query, criteriaBuilder) -> {
+            return null;
+        });
     }
 }
