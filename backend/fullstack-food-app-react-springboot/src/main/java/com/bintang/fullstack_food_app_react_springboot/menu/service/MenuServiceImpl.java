@@ -37,7 +37,7 @@ public class MenuServiceImpl implements MenuService {
     private final AwsS3Service awsS3Service;
 
     @Override
-    public Response<MenuDto> addMenu(MenuDto menuDto) {
+    public Response<MenuDto> createMenu(MenuDto menuDto) {
 
         log.info("Inside addMenu()");
 

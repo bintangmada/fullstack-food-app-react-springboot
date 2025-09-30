@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MenuService {
 
-    Response<MenuDto> addMenu(MenuDto menuDto);
+    Response<MenuDto> createMenu(MenuDto menuDto);
     Response<MenuDto> updateMenu(MenuDto menuDto);
     Response<MenuDto> getMenuById(Long menuId);
     Response<?> deleteMenu(Long menuId);
