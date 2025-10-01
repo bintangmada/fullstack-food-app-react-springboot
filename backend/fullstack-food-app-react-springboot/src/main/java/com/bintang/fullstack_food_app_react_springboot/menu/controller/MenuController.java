@@ -12,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/menu")
 @RequiredArgsConstructor
@@ -29,6 +31,7 @@ public class MenuController {
     }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response<MenuDto>> updateMenu(
             @ModelAttribute @Valid MenuDto menuDto,
             @RequestPart(value = "imageFile", required = false) Multipart imageFile) {
@@ -41,5 +44,17 @@ public class MenuController {
         return ResponseEntity.ok(menuService.getMenuById(menuId));
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> deleteMenuById(@PathVariable("id") Long menuId){
+        return ResponseEntity.ok(menuService.deleteMenu(menuId));
+    }
+
+    @GetMapping
+    public ResponseEntity<Response<List<MenuDto>>> getMenus(
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String search){
+        return ResponseEntity.ok(menuService.getMenus(categoryId, search));
+    }
 
 }
