@@ -36,5 +36,10 @@ public class MenuController {
         return ResponseEntity.ok(menuService.updateMenu(menuDto));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<MenuDto>> getMenuById(@PathVariable("id") Long menuId){
+        return ResponseEntity.ok(menuService.getMenuById(menuId));
+    }
+
 
 }
