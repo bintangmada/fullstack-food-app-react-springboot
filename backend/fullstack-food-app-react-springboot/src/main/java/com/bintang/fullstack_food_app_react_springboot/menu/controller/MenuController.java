@@ -3,6 +3,7 @@ package com.bintang.fullstack_food_app_react_springboot.menu.controller;
 import com.bintang.fullstack_food_app_react_springboot.menu.dtos.MenuDto;
 import com.bintang.fullstack_food_app_react_springboot.menu.service.MenuService;
 import com.bintang.fullstack_food_app_react_springboot.response.Response;
+import jakarta.mail.Multipart;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -22,8 +23,18 @@ public class MenuController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response<MenuDto>> createMenu(
             @ModelAttribute @Valid MenuDto menuDto,
-            @RequestPart(value = "imageFile", required = true)MultipartFile imageFile){
+            @RequestPart(value = "imageFile", required = true) MultipartFile imageFile) {
         menuDto.setImageFile(imageFile);
         return ResponseEntity.ok(menuService.createMenu(menuDto));
     }
+
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Response<MenuDto>> updateMenu(
+            @ModelAttribute @Valid MenuDto menuDto,
+            @RequestPart(value = "imageFile", required = false) Multipart imageFile) {
+        menuDto.setImageFile(menuDto.getImageFile());
+        return ResponseEntity.ok(menuService.updateMenu(menuDto));
+    }
+
+
 }
