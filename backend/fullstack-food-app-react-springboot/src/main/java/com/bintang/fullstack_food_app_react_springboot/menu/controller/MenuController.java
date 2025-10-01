@@ -29,6 +29,7 @@ public class MenuController {
     }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response<MenuDto>> updateMenu(
             @ModelAttribute @Valid MenuDto menuDto,
             @RequestPart(value = "imageFile", required = false) Multipart imageFile) {
