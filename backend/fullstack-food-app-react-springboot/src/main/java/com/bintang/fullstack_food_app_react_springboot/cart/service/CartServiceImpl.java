@@ -3,6 +3,7 @@ package com.bintang.fullstack_food_app_react_springboot.cart.service;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.entity.User;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.service.UserService;
 import com.bintang.fullstack_food_app_react_springboot.cart.dtos.CartDto;
+import com.bintang.fullstack_food_app_react_springboot.cart.entity.Cart;
 import com.bintang.fullstack_food_app_react_springboot.cart.repository.CartItemRepository;
 import com.bintang.fullstack_food_app_react_springboot.cart.repository.CartRepository;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
+
+import java.util.ArrayList;
 
 @Service
 @Slf4j
@@ -40,7 +43,13 @@ public class CartServiceImpl implements CartService{
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new NotFoundException("Menu is not found"));
 
-        // LANJUT LAGI
+        Cart cart = cartRepository.findByUser_Id(user.getId())
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUser(user);
+                    newCart.setCartItems(new ArrayList<>());
+                    return cartRepository.save(newCart);
+                });
 
         return null;
     }
