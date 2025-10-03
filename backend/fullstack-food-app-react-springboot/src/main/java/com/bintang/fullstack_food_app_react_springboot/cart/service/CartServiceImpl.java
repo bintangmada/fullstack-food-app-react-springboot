@@ -4,6 +4,7 @@ import com.bintang.fullstack_food_app_react_springboot.auth_users.entity.User;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.service.UserService;
 import com.bintang.fullstack_food_app_react_springboot.cart.dtos.CartDto;
 import com.bintang.fullstack_food_app_react_springboot.cart.entity.Cart;
+import com.bintang.fullstack_food_app_react_springboot.cart.entity.CartItem;
 import com.bintang.fullstack_food_app_react_springboot.cart.repository.CartItemRepository;
 import com.bintang.fullstack_food_app_react_springboot.cart.repository.CartRepository;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -50,6 +52,12 @@ public class CartServiceImpl implements CartService{
                     newCart.setCartItems(new ArrayList<>());
                     return cartRepository.save(newCart);
                 });
+
+        Optional<CartItem> optionalCartItem = cart.getCartItems()
+                .stream()
+                .filter(cartItem -> cartItem.getMenu().getId().equals(menuId))
+                .findFirst();
+
 
         return null;
     }
