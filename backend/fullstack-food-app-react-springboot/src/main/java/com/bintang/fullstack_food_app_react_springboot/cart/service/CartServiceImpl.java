@@ -15,9 +15,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -25,7 +27,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
-public class CartServiceImpl implements CartService{
+public class CartServiceImpl implements CartService {
 
     private final CartItemRepository cartItemRepository;
     private final CartRepository cartRepository;
@@ -58,8 +60,30 @@ public class CartServiceImpl implements CartService{
                 .filter(cartItem -> cartItem.getMenu().getId().equals(menuId))
                 .findFirst();
 
+        if (optionalCartItem.isPresent()) {
+            CartItem cartItem = optionalCartItem.get();
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+            cartItem.setSubTotal(cartItem.getPricePerUnit().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+            cartItemRepository.save(cartItem);
+        }else{
+            // IF NOT PRESENT, THEN ADD
+            CartItem newCartItem = CartItem.builder()
+                    .cart(cart)
+                    .menu(menu)
+                    .quantity(quantity)
+                    .pricePerUnit(menu.getPrice())
+                    .subTotal(menu.getPrice().multiply(BigDecimal.valueOf(quantity)))
+                    .build();
+            cart.getCartItems().add(newCartItem);
+            cartItemRepository.save(newCartItem);
+        }
 
-        return null;
+//        cartRepository.save(cart);
+
+        return Response.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("item added to cart successfully")
+                .build();
     }
 
     @Override
