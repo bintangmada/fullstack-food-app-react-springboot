@@ -89,7 +89,26 @@ public class CartServiceImpl implements CartService {
     @Override
     public Response<?> incrementItem(Long menuId) {
         log.info("Inside incrementItem()");
-        return null;
+
+        User user = userService.getCurrentLoggedInUser();
+        Cart cart = cartRepository.findByUser_Id(user.getId())
+                .orElseThrow(() -> new NotFoundException("Cart is not found"));
+
+        CartItem cartItem = cart.getCartItems()
+                .stream()
+                .filter(item -> item.getMenu().getId().equals(menuId))
+                .findFirst().orElseThrow(() -> new NotFoundException("Menu is not found"));
+
+        int newQuantity = cartItem.getQuantity() + 1;
+
+        cartItem.setQuantity(newQuantity);
+        cartItem.setSubTotal(cartItem.getPricePerUnit().multiply(BigDecimal.valueOf(newQuantity)));
+        cartItemRepository.save(cartItem);
+
+        return Response.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("item quantity incremented successfully")
+                .build();
     }
 
     @Override
