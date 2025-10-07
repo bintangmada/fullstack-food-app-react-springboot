@@ -21,6 +21,7 @@ import org.springframework.ui.ModelMap;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -167,9 +168,39 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public Response<CartDto> getShoppingCart() {
         log.info("Inside getShoppingCart()");
-        return null;
+
+        User user = userService.getCurrentLoggedInUser();
+
+        Cart cart = cartRepository.findByUser_Id(user.getId())
+                .orElseThrow(() -> new NotFoundException("Cart is not found"));
+
+        List<CartItem> cartItems = cart.getCartItems();
+
+        CartDto cartDto = modelMapper.map(cart, CartDto.class);
+
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        if(cartItems != null){
+            for(CartItem item : cartItems){
+                totalAmount = totalAmount.add(item.getSubTotal());
+            }
+        }
+
+        cartDto.setTotalAmount(totalAmount);
+
+        // remove reviews from response
+        if(cartDto.getCartItems() != null){
+            cartDto.getCartItems()
+                    .forEach(item -> item.getMenuDto().setReviews(null));
+        }
+
+        return Response.<CartDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Shopping cart retrieved successfully")
+                .data(cartDto)
+                .build();
     }
 
     @Override
