@@ -206,6 +206,21 @@ public class CartServiceImpl implements CartService {
     @Override
     public Response<?> clearShoppingCart() {
         log.info("Inside clearShoppingCart()");
-        return null;
+
+        User user = userService.getCurrentLoggedInUser();
+
+        Cart cart = cartRepository.findByUser_Id(user.getId())
+                .orElseThrow(() -> new NotFoundException("Cart is not found"));
+
+        cartItemRepository.deleteAll(cart.getCartItems());
+
+        cart.getCartItems().clear();
+
+        cartRepository.save(cart);
+
+        return Response.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Shopping cart cleared successfully")
+                .build();
     }
 }
