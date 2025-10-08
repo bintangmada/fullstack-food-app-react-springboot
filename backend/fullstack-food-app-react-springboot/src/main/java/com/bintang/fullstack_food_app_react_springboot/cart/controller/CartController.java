@@ -24,5 +24,10 @@ public class CartController {
         return ResponseEntity.ok(cartService.incrementItem(menuId));
     }
 
-    
+    @PutMapping("/items/decrement/{menuId}")
+    public ResponseEntity<Response<?>> decrementItem(@PathVariable("menuId") Long menuId){
+        return ResponseEntity.ok(cartService.decrementItem(menuId));
+    }
+
+
 }
