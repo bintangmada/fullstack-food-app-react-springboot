@@ -34,7 +34,15 @@ public class CartController {
         return ResponseEntity.ok(cartService.removeItem(cartItemId));
     }
 
+    @GetMapping
+    public ResponseEntity<Response<?>> getShoppingCart(){
+        return ResponseEntity.ok(cartService.getShoppingCart());
+    }
 
+    @DeleteMapping
+    public ResponseEntity<Response<?>> clearShoppingCart(){
+        return ResponseEntity.ok(cartService.clearShoppingCart());
+    }
 
 
 }
