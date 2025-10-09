@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fdfaf4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .greetings {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            color: #2e7d32;
+            font-size: 20px;
+            margin-top: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+
+        p {
+            line-height: 1.6;
+            font-size: 15px;
+            margin: 8px 0;
+        }
+
+        .total {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .btn {
+            display: block;
+            width: fit-content;
+            background-color: #2e7d32;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 12px 24px;
+            margin: 25px auto;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #256528;
+        }
+
+        .footer {
+            font-size: 13px;
+            text-align: center;
+            color: #666;
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Order Confirmation</h1>
+    </div>
+
+    <div class="content">
+        <p class="greetings">
+            Dear <span th:text="${customerName}">CustomerName</span>,
+        </p>
+        <p>Thank you for your order! We're excited to get your items to you.</p>
+
+        <h2>Order Details</h2>
+        <p>Order ID: <span th:text="${orderId}">12345</span></p>
+        <p>Order Date: <span th:text="${orderDate}">2025-10-09</span></p>
+        <p>Delivery Address: <span th:text="${deliveryAddress}">Jakarta</span></p>
+        <p>Total Items: <span th:text="${totalItems}"
