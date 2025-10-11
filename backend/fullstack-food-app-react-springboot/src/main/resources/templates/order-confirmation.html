@@ -6,105 +6,96 @@
     <title>Order Confirmation</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #fdfaf4;
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
             margin: 0;
             padding: 0;
-            color: #333;
         }
-
         .container {
             max-width: 600px;
             margin: 30px auto;
             background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            overflow: hidden;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
-        .header {
-            background-color: #2e7d32;
-            color: white;
-            text-align: center;
-            padding: 25px;
+        h1 {
+            color: #333333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
         }
-
-        .header h1 {
-            margin: 0;
-            font-size: 26px;
-            font-weight: bold;
-        }
-
-        .content {
-            padding: 30px;
-        }
-
-        .greetings {
+        .greeting {
             font-size: 16px;
-            margin-bottom: 15px;
+            color: #444;
         }
-
-        h2 {
-            color: #2e7d32;
-            font-size: 20px;
-            margin-top: 25px;
-            border-bottom: 2px solid #e0e0e0;
+        .order-details {
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        .order-details h2 {
+            color: #444;
+            border-bottom: 1px solid #eee;
             padding-bottom: 5px;
         }
-
-        p {
-            line-height: 1.6;
-            font-size: 15px;
-            margin: 8px 0;
-        }
-
         .total {
+            font-weight: bold;
+            color: #000;
             margin-top: 15px;
-            font-weight: bold;
-            font-size: 16px;
         }
-
-        .btn {
-            display: block;
-            width: fit-content;
-            background-color: #2e7d32;
-            color: white;
+        .button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white !important;
+            padding: 10px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
             text-decoration: none;
-            text-align: center;
-            padding: 12px 24px;
-            margin: 25px auto;
-            border-radius: 8px;
             font-weight: bold;
-            transition: background 0.3s;
         }
-
-        .btn:hover {
-            background-color: #256528;
+        .button:hover {
+            background-color: #0056b3;
         }
-
         .footer {
+            margin-top: 30px;
             font-size: 13px;
-            text-align: center;
-            color: #666;
-            padding: 20px;
+            color: #777;
             border-top: 1px solid #eee;
+            padding-top: 10px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <h1>Order Confirmation</h1>
+    <h1>Order Confirmation</h1>
+
+    <p class="greeting">Dear <span th:text="${customerName}"></span>,</p>
+    <p>Thank you for your order! We're excited to get your items to you.</p>
+
+    <div class="order-details">
+        <h2>Order Details</h2>
+        <p>Order ID: <span th:text="${orderId}"></span></p>
+        <p>Order Date: <span th:text="${orderDate}"></span></p>
+        <p>Delivery Address: <span th:text="${deliveryAddress}"></span></p>
+        <p>Total Items: <span th:text="${totalItems}"></span></p>
+
+        <div class="order-items" th:utext="${orderItemsHtml}"></div>
+
+        <p class="total">Total Amount: <span th:text="${totalAmount}"></span></p>
     </div>
 
-    <div class="content">
-        <p class="greetings">
-            Dear <span th:text="${customerName}">CustomerName</span>,
-        </p>
-        <p>Thank you for your order! We're excited to get your items to you.</p>
+    <a class="button" th:href="${paymentLink}">Complete Your Order</a>
 
-        <h2>Order Details</h2>
-        <p>Order ID: <span th:text="${orderId}">12345</span></p>
-        <p>Order Date: <span th:text="${orderDate}">2025-10-09</span></p>
-        <p>Delivery Address: <span th:text="${deliveryAddress}">Jakarta</span></p>
-        <p>Total Items: <span th:text="${totalItems}"
+    <p>Click the button above to securely complete your payment and finalize your order.</p>
+
+    <div class="footer">
+        <p>If you have any questions, please contact us at
+            <a href="mailto:support@phegondev.com">support@phegondev.com</a>.
+        </p>
+        <p>
+            <span th:text="${currentYear}">2025</span> &copy; Your <b>Phegon Food</b>. All rights reserved.
+        </p>
+    </div>
+</div>
+</body>
+</html>
