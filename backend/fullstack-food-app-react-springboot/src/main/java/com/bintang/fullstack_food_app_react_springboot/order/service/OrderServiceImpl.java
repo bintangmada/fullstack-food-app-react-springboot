@@ -1,6 +1,7 @@
 package com.bintang.fullstack_food_app_react_springboot.order.service;
 
 import com.bintang.fullstack_food_app_react_springboot.auth_users.service.UserService;
+import com.bintang.fullstack_food_app_react_springboot.cart.repository.CartRepository;
 import com.bintang.fullstack_food_app_react_springboot.cart.service.CartService;
 import com.bintang.fullstack_food_app_react_springboot.email_notification.services.NotificationService;
 import com.bintang.fullstack_food_app_react_springboot.enums.OrderStatus;
@@ -30,39 +31,48 @@ public class OrderServiceImpl implements OrderService {
     private final ModelMapper modelMapper;
     private final TemplateEngine templateEngine;
     private final CartService cartService;
+    private final CartRepository cartRepository;
 
     @Override
     public Response<?> placeOrderFromCart() {
+        log.info("Inside placeOrderFromCart()");
+
         return null;
     }
 
     @Override
     public Response<OrderDto> getOrderById(Long orderId) {
+        log.info("Inside getOrderById()");
         return null;
     }
 
     @Override
     public Response<Page<OrderDto>> getAllOrders(OrderStatus orderStatus, int page, int size) {
+        log.info("Inside getAllOrders()");
         return null;
     }
 
     @Override
     public Response<List<OrderDto>> getOrdersOfUser() {
+        log.info("Inside getOrdersOfUser()");
         return null;
     }
 
     @Override
     public Response<OrderItemDto> getOrderItemById(Long orderItemId) {
+        log.info("Inside getOrderItemById()");
         return null;
     }
 
     @Override
     public Response<OrderDto> updateOrderStatus(OrderDto orderDto) {
+        log.info("Inside updateOrderStatus()");
         return null;
     }
 
     @Override
     public Response<Long> couuntUniqueCustomers() {
+        log.info("Inside couuntUniqueCustomers()");
         return null;
     }
 }
