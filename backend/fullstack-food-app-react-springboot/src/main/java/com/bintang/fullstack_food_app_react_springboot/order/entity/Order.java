@@ -5,6 +5,7 @@ import com.bintang.fullstack_food_app_react_springboot.enums.OrderStatus;
 import com.bintang.fullstack_food_app_react_springboot.enums.PaymentStatus;
 import com.bintang.fullstack_food_app_react_springboot.payment.entity.Payment;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@Builder
 public class Order {
 
     @Id

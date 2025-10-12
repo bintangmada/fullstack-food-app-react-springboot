@@ -2,11 +2,13 @@ package com.bintang.fullstack_food_app_react_springboot.order.entity;
 
 import com.bintang.fullstack_food_app_react_springboot.menu.entity.Menu;
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
+@Builder
 public class OrderItem {
 
     @Id
