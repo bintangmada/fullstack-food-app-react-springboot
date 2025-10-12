@@ -25,11 +25,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
@@ -138,5 +140,15 @@ public class OrderServiceImpl implements OrderService {
     public Response<Long> couuntUniqueCustomers() {
         log.info("Inside couuntUniqueCustomers()");
         return null;
+    }
+
+    private void sendOrderConfirmationEmail(User customer, OrderDto orderDto) {
+        String subject = "Your Order Confirmation - Order #"+orderDto.getId();
+
+        // CREATE A THYMELEAF CONTEXT AND SET VARIABLES. IMPORT THE CONTEXT FROM THYMELEAF
+        Context context = new Context(Locale.getDefault());
+        context.setVariable("customerName", customer.getName());
+
+
     }
 }
