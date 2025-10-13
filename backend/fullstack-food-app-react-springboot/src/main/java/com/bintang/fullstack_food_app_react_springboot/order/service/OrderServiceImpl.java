@@ -148,6 +148,18 @@ public class OrderServiceImpl implements OrderService {
         // CREATE A THYMELEAF CONTEXT AND SET VARIABLES. IMPORT THE CONTEXT FROM THYMELEAF
         Context context = new Context(Locale.getDefault());
         context.setVariable("customerName", customer.getName());
+        context.setVariable("orderId", String.valueOf(orderDto.getId()));
+        context.setVariable("orderDate", orderDto.getOrderDate());
+        context.setVariable("totalAmount", orderDto.getTotalAmount());
+
+        // FORMAT DELIVERY ADDRESS
+        String deliveryAddress = orderDto.getUser().getAddress();
+        context.setVariable("deliveryAddress", deliveryAddress);
+
+        context.setVariable("currentYear", java.time.Year.now());
+
+        // BUILD THE ORDER ITEMS HTML USING STRING BUILDER
+
 
 
     }
