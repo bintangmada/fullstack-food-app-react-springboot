@@ -6,6 +6,7 @@ import com.bintang.fullstack_food_app_react_springboot.cart.entity.Cart;
 import com.bintang.fullstack_food_app_react_springboot.cart.entity.CartItem;
 import com.bintang.fullstack_food_app_react_springboot.cart.repository.CartRepository;
 import com.bintang.fullstack_food_app_react_springboot.cart.service.CartService;
+import com.bintang.fullstack_food_app_react_springboot.email_notification.dtos.NotificationDto;
 import com.bintang.fullstack_food_app_react_springboot.email_notification.services.NotificationService;
 import com.bintang.fullstack_food_app_react_springboot.enums.OrderStatus;
 import com.bintang.fullstack_food_app_react_springboot.enums.PaymentStatus;
@@ -21,6 +22,7 @@ import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,9 @@ public class OrderServiceImpl implements OrderService {
     private final CartService cartService;
     private final CartRepository cartRepository;
 
+    @Value("${base.payment.link}")
+    private String basePaymentLink;
+
     @Override
     public Response<?> placeOrderFromCart() {
 
@@ -54,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
 
         User customer = userService.getCurrentLoggedInUser();
         String deliveryAddress = customer.getAddress();
-        if(deliveryAddress == null){
+        if (deliveryAddress == null) {
             throw new NotFoundException("Delivery address not found for the user");
         }
 
@@ -62,14 +67,14 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NotFoundException("Cart not found for the user"));
 
         List<CartItem> cartItems = cart.getCartItems();
-        if(cartItems == null || cartItems.isEmpty()){
+        if (cartItems == null || cartItems.isEmpty()) {
             throw new BadRequestException("Cart is empty");
         }
 
         List<OrderItem> orderItems = new ArrayList<>();
         BigDecimal totalAmount = BigDecimal.ZERO;
 
-        for(CartItem cartItem : cartItems){
+        for (CartItem cartItem : cartItems) {
             OrderItem orderItem = OrderItem.builder()
                     .menu(cartItem.getMenu())
                     .quantity(cartItem.getQuantity())
@@ -143,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void sendOrderConfirmationEmail(User customer, OrderDto orderDto) {
-        String subject = "Your Order Confirmation - Order #"+orderDto.getId();
+        String subject = "Your Order Confirmation - Order #" + orderDto.getId();
 
         // CREATE A THYMELEAF CONTEXT AND SET VARIABLES. IMPORT THE CONTEXT FROM THYMELEAF
         Context context = new Context(Locale.getDefault());
@@ -159,8 +164,28 @@ public class OrderServiceImpl implements OrderService {
         context.setVariable("currentYear", java.time.Year.now());
 
         // BUILD THE ORDER ITEMS HTML USING STRING BUILDER
+        StringBuilder orderItemsHtml = new StringBuilder();
+        for (OrderItemDto item : orderDto.getOrderItems()) {
+            orderItemsHtml
+                    .append("<div class =\"order-item\">")
+                    .append("<p>").append(item.getMenu().getName()).append(" x").append(item.getQuantity()).append("</p>")
+                    .append("<p> $").append(item.getSubTotal()).append("</p>")
+                    .append("</div>");
+        }
+        context.setVariable("orderItemsHtml", orderItemsHtml.toString());
+        context.setVariable("totalItems", orderDto.getOrderItems().size());
 
+        String paymentLink = basePaymentLink + orderDto.getId() + "&amount=" + orderDto.getTotalAmount();
+        context.setVariable("paymentLink", paymentLink);
 
+        String emailBody = templateEngine.process("order-confirmation", context);
+
+        notificationService.sendEmail(NotificationDto.builder()
+                .recipient(customer.getEmail())
+                .subject(subject)
+                .body(emailBody)
+                .isHtml(true)
+                .build());
 
     }
 }
