@@ -24,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -131,7 +134,28 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Response<Page<OrderDto>> getAllOrders(OrderStatus orderStatus, int page, int size) {
         log.info("Inside getAllOrders()");
-        return null;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<Order> orderPage;
+
+        if(orderStatus != null){
+            orderPage = orderRepository.findByOrderStatus(orderStatus, pageable);
+        }else{
+            orderPage = orderRepository.findAll(pageable);
+        }
+
+        Page<OrderDto> orderDtoPage = orderPage.map(order -> {
+            OrderDto dto = modelMapper.map(order, OrderDto.class);
+            dto.getOrderItems().forEach(orderItemDto -> orderItemDto.getMenu().setReviews(null));
+            return dto;
+        });
+
+        return Response.<Page<OrderDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Orders retrieved successfully")
+                .data(orderDtoPage)
+                .build();
     }
 
     @Override
