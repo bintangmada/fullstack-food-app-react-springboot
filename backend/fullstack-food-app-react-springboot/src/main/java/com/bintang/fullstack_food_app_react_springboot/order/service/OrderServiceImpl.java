@@ -114,7 +114,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Response<OrderDto> getOrderById(Long orderId) {
         log.info("Inside getOrderById()");
-        return null;
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("Order is not found"));
+
+        OrderDto orderDto = modelMapper.map(order, OrderDto.class);
+
+        return Response.<OrderDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Order retrieved successfully")
+                .data(orderDto)
+                .build();
+
     }
 
     @Override
