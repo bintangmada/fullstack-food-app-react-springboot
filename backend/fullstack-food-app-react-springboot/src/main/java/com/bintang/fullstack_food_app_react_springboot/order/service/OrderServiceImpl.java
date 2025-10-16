@@ -172,7 +172,16 @@ public class OrderServiceImpl implements OrderService {
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .toList();
 
-        return null;
+        orderDtos.forEach(orderItem ->{
+            orderItem.setUser(null);
+            orderItem.getOrderItems().forEach(item -> item.getMenu().setReviews(null));
+        });
+
+        return Response.<List<OrderDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Order for user retrieved successfully")
+                .data(orderDtos)
+                .build();
     }
 
     @Override
