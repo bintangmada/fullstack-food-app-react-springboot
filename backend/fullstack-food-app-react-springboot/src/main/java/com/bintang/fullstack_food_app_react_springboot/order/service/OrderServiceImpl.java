@@ -1,6 +1,7 @@
 package com.bintang.fullstack_food_app_react_springboot.order.service;
 
 import com.bintang.fullstack_food_app_react_springboot.auth_users.entity.User;
+import com.bintang.fullstack_food_app_react_springboot.auth_users.repository.UserRepository;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.service.UserService;
 import com.bintang.fullstack_food_app_react_springboot.cart.entity.Cart;
 import com.bintang.fullstack_food_app_react_springboot.cart.entity.CartItem;
@@ -42,6 +43,7 @@ import java.util.Locale;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderServiceImpl implements OrderService {
+    private final UserRepository userRepository;
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -161,6 +163,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Response<List<OrderDto>> getOrdersOfUser() {
         log.info("Inside getOrdersOfUser()");
+
+        User customer = userService.getCurrentLoggedInUser();
+        List<Order> orders = orderRepository.findByUserOrderByOrderDateDesc(customer);
+
+        // LANJUT LAGI
+
         return null;
     }
 
