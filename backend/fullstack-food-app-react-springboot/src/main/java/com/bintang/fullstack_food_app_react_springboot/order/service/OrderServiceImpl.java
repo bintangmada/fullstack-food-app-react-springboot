@@ -221,9 +221,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Response<Long> couuntUniqueCustomers() {
+    public Response<Long> countUniqueCustomers() {
         log.info("Inside couuntUniqueCustomers()");
-        return null;
+
+        Long uniqueCustomerCount = orderRepository.countDistinctUsers();
+
+        return Response.<Long>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("countUniqueCustomers retrieved successfully")
+                .data(uniqueCustomerCount)
+                .build();
     }
 
     private void sendOrderConfirmationEmail(User customer, OrderDto orderDto) {
