@@ -167,7 +167,10 @@ public class OrderServiceImpl implements OrderService {
         User customer = userService.getCurrentLoggedInUser();
         List<Order> orders = orderRepository.findByUserOrderByOrderDateDesc(customer);
 
-        // LANJUT LAGI
+        List<OrderDto> orderDtos = orders
+                .stream()
+                .map(order -> modelMapper.map(order, OrderDto.class))
+                .toList();
 
         return null;
     }
