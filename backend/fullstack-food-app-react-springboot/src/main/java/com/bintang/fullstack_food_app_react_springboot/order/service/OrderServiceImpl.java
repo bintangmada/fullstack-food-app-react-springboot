@@ -13,6 +13,7 @@ import com.bintang.fullstack_food_app_react_springboot.enums.OrderStatus;
 import com.bintang.fullstack_food_app_react_springboot.enums.PaymentStatus;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.BadRequestException;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
+import com.bintang.fullstack_food_app_react_springboot.menu.dtos.MenuDto;
 import com.bintang.fullstack_food_app_react_springboot.order.dto.OrderDto;
 import com.bintang.fullstack_food_app_react_springboot.order.dto.OrderItemDto;
 import com.bintang.fullstack_food_app_react_springboot.order.entity.Order;
@@ -192,8 +193,13 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NotFoundException("Order item is not found"));
 
         OrderItemDto orderItemDto = modelMapper.map(orderItem, OrderItemDto.class);
+        orderItemDto.setMenu(modelMapper.map(orderItem.getMenu(), MenuDto.class));
 
-        return null;
+        return Response.<OrderItemDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Order Item retrieved successfully")
+                .data(orderItemDto)
+                .build();
     }
 
     @Override
