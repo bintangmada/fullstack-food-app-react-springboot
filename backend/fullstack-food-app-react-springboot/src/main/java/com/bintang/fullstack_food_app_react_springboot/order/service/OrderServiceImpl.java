@@ -205,7 +205,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Response<OrderDto> updateOrderStatus(OrderDto orderDto) {
         log.info("Inside updateOrderStatus()");
-        return null;
+
+        Order order = orderRepository.findById(orderDto.getId())
+                .orElseThrow(() -> new NotFoundException("Order is not found"));
+
+        OrderStatus orderStatus = orderDto.getOrderStatus();
+        order.setOrderStatus(orderStatus);
+
+        orderRepository.save(order);
+
+        return Response.<OrderDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Order updated successfully")
+                .build();
     }
 
     @Override
