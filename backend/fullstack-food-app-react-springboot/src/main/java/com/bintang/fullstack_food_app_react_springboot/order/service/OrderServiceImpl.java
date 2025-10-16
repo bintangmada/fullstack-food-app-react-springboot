@@ -191,6 +191,8 @@ public class OrderServiceImpl implements OrderService {
         OrderItem orderItem = orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new NotFoundException("Order item is not found"));
 
+        OrderItemDto orderItemDto = modelMapper.map(orderItem, OrderItemDto.class);
+
         return null;
     }
 
