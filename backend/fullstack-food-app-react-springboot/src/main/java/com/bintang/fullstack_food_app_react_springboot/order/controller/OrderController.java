@@ -1,6 +1,11 @@
 package com.bintang.fullstack_food_app_react_springboot.order.controller;
 
+import com.bintang.fullstack_food_app_react_springboot.order.service.OrderService;
+import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/orders")
 public class OrderController {
 
+    private final OrderService orderService;
 
+    @PostMapping("/checkout")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
+    public ResponseEntity<Response<?>> checkout(){
+        return ResponseEntity.ok(orderService.placeOrderFromCart());
+    }
 
 }
