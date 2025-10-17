@@ -5,9 +5,7 @@ import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +18,11 @@ public class OrderController {
     @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<Response<?>> checkout(){
         return ResponseEntity.ok(orderService.placeOrderFromCart());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<?>> getOrderById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(orderService.getOrderById(id));
     }
 
 }
