@@ -1,6 +1,7 @@
 package com.bintang.fullstack_food_app_react_springboot.order.controller;
 
 import com.bintang.fullstack_food_app_react_springboot.order.dto.OrderDto;
+import com.bintang.fullstack_food_app_react_springboot.order.dto.OrderItemDto;
 import com.bintang.fullstack_food_app_react_springboot.order.service.OrderService;
 import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,11 @@ public class OrderController {
     @GetMapping("/me")
     public ResponseEntity<Response<List<OrderDto>>> getMyOrders(){
         return ResponseEntity.ok(orderService.getOrdersOfUser());
+    }
+
+    @GetMapping("order-item/{orderItemId}")
+    public ResponseEntity<Response<OrderItemDto>> getOrderItemById(@PathVariable("orderItemId") Long orderItemId){
+        return ResponseEntity.ok(orderService.getOrderItemById(orderItemId));
     }
 
 }
