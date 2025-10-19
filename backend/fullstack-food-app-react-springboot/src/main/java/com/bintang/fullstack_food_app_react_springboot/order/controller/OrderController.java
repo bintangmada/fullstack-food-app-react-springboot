@@ -50,4 +50,10 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrders(orderStatus, page, size));
     }
 
+    @PutMapping("/update")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response<OrderDto>>updateOrderStatus(@RequestBody OrderDto orderDto){
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderDto));
+    }
+
 }
