@@ -2,6 +2,9 @@ package com.bintang.fullstack_food_app_react_springboot.review.service;
 
 import com.bintang.fullstack_food_app_react_springboot.auth_users.entity.User;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.service.UserService;
+import com.bintang.fullstack_food_app_react_springboot.exceptions.BadRequestException;
+import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
+import com.bintang.fullstack_food_app_react_springboot.menu.entity.Menu;
 import com.bintang.fullstack_food_app_react_springboot.menu.repository.MenuRepository;
 import com.bintang.fullstack_food_app_react_springboot.order.repository.OrderItemRepository;
 import com.bintang.fullstack_food_app_react_springboot.order.repository.OrderRepository;
@@ -35,6 +38,15 @@ public class ReviewServiceImpl implements ReviewService {
 
         // GET CURRENT USER
         User user = userService.getCurrentLoggedInUser();
+
+        if(reviewDto.getOrderId() == null || reviewDto.getMenuId() == null){
+            throw new BadRequestException("Order Id and Menu Item Id is required");
+        }
+
+        Menu menu = menuRepository.findById(reviewDto.getMenuId())
+                .orElseThrow(() -> new NotFoundException("Menu item is not found"));
+
+
 
         return null;
     }
