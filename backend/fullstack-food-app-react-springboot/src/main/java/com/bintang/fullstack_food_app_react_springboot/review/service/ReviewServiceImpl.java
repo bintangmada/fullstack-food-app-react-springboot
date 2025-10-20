@@ -2,10 +2,12 @@ package com.bintang.fullstack_food_app_react_springboot.review.service;
 
 import com.bintang.fullstack_food_app_react_springboot.auth_users.entity.User;
 import com.bintang.fullstack_food_app_react_springboot.auth_users.service.UserService;
+import com.bintang.fullstack_food_app_react_springboot.enums.OrderStatus;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.BadRequestException;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
 import com.bintang.fullstack_food_app_react_springboot.menu.entity.Menu;
 import com.bintang.fullstack_food_app_react_springboot.menu.repository.MenuRepository;
+import com.bintang.fullstack_food_app_react_springboot.order.entity.Order;
 import com.bintang.fullstack_food_app_react_springboot.order.repository.OrderItemRepository;
 import com.bintang.fullstack_food_app_react_springboot.order.repository.OrderRepository;
 import com.bintang.fullstack_food_app_react_springboot.response.Response;
@@ -46,7 +48,25 @@ public class ReviewServiceImpl implements ReviewService {
         Menu menu = menuRepository.findById(reviewDto.getMenuId())
                 .orElseThrow(() -> new NotFoundException("Menu item is not found"));
 
+        Order order = orderRepository.findById(reviewDto.getOrderId())
+                .orElseThrow(() -> new NotFoundException("Order is not found"));
 
+        if(!order.getUser().getId().equals(user.getId())){
+            throw new BadRequestException("This order does not belong to you");
+        }
+
+        if(order.getOrderStatus() != OrderStatus.DELIVERED){
+            throw new BadRequestException("You can only review items from delivered orders");
+        }
+
+        boolean itemInOrder = orderItemRepository.existsByOrderIdAndMenuId(reviewDto.getOrderId(), reviewDto.getMenuId());
+        if(!itemInOrder){
+            throw new BadRequestException("This menu item was not part of specified order");
+        }
+
+        if(reviewRepository.existsByUserIdAndMenuIdAndOrderId(user.getId(), reviewDto.getMenuId(), reviewDto.getMenuId())){
+            throw new BadRequestException("You have already reviewed this item from this order");
+        }
 
         return null;
     }
