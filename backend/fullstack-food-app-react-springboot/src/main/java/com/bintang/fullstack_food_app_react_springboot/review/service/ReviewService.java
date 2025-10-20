@@ -9,6 +9,7 @@ public interface ReviewService {
 
     Response<ReviewDto> createReview(ReviewDto reviewDto);
     Response<List<ReviewDto>> getReviewsForMenu(Long menuId);
+    Response<Double> getAverageRating(Long menuId);
 
 
 }
