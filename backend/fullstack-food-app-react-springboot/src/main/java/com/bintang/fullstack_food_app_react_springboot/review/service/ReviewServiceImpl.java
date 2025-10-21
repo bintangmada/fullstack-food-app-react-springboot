@@ -18,6 +18,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -86,7 +87,11 @@ public class ReviewServiceImpl implements ReviewService {
         responseDto.setUserName(user.getName());
         responseDto.setMenuName(menu.getName());
 
-        return null;
+        return Response.<ReviewDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Review addedd successfully")
+                .data(responseDto)
+                .build();
     }
 
     @Override
