@@ -79,6 +79,13 @@ public class ReviewServiceImpl implements ReviewService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
+        Review savedReview = reviewRepository.save(review);
+
+        // RETURN RESPONSE WITH REVIEW DATA
+        ReviewDto responseDto = modelMapper.map(savedReview, ReviewDto.class);
+        responseDto.setUserName(user.getName());
+        responseDto.setMenuName(menu.getName());
+
         return null;
     }
 
