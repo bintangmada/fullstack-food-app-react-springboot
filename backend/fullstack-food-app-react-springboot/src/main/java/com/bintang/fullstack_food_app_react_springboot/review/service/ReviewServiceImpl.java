@@ -114,6 +114,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Response<Double> getAverageRating(Long menuId) {
         log.info("inside getAverageRating()");
-        return null;
+
+        Double averageRating = reviewRepository.calculateAverageRatingByMenuId(menuId);
+
+        return Response.<Double>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Average rating is retrieved successfully")
+                .data(averageRating != null ? averageRating : 0.0)
+                .build();
     }
 }
