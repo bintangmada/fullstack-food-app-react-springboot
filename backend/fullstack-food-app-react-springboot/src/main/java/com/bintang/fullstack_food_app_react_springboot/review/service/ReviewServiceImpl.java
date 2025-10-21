@@ -97,6 +97,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Response<List<ReviewDto>> getReviewsForMenu(Long menuId) {
         log.info("inside getReviewsForMenu()");
+
+        List<Review> reviews = reviewRepository.findByMenuIdOrderByIdDesc(menuId);
+
+        List<ReviewDto> reviewDtos = reviews.stream()
+                .map(review -> modelMapper.map(review, ReviewDto.class))
+                .toList();
+
         return null;
     }
 
