@@ -104,7 +104,11 @@ public class ReviewServiceImpl implements ReviewService {
                 .map(review -> modelMapper.map(review, ReviewDto.class))
                 .toList();
 
-        return null;
+        return Response.<List<ReviewDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Reviews retrieved successfully")
+                .data(reviewDtos)
+                .build();
     }
 
     @Override
