@@ -7,10 +7,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +23,13 @@ public class ReviewController {
     public ResponseEntity<Response<ReviewDto>> createReview(@RequestBody @Valid ReviewDto reviewDto){
         return ResponseEntity.ok(reviewService.createReview(reviewDto));
     }
+
+    @GetMapping("/menu-item/{menuId}")
+    public ResponseEntity<Response<List<ReviewDto>>> getReviewsForMenu(@PathVariable("menuId") Long menuId){
+        return ResponseEntity.ok(reviewService.getReviewsForMenu(menuId));
+    }
+
+
 
 
 }
