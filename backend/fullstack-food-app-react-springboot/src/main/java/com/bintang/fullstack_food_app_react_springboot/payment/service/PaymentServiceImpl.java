@@ -9,6 +9,7 @@ import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 
@@ -24,6 +25,9 @@ public class PaymentServiceImpl implements PaymentService{
     private final TemplateEngine templateEngine;
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
+
+    @Value("${stripe.api.secret.key}")
+    private String secretKey;
 
     @Override
     public Response<?> initializePayment(PaymentDto paymentDto) {
