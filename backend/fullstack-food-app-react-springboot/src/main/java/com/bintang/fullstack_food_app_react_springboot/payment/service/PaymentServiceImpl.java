@@ -6,6 +6,7 @@ import com.bintang.fullstack_food_app_react_springboot.order.repository.OrderRep
 import com.bintang.fullstack_food_app_react_springboot.payment.dto.PaymentDto;
 import com.bintang.fullstack_food_app_react_springboot.payment.repository.PaymentRepository;
 import com.bintang.fullstack_food_app_react_springboot.response.Response;
+import com.stripe.Stripe;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -33,7 +34,12 @@ public class PaymentServiceImpl implements PaymentService{
     private String frontEndBaseUrl;
 
     @Override
-    public Response<?> initializePayment(PaymentDto paymentDto) {
+    public Response<?> initializePayment(PaymentDto paymentRequest) {
+        log.info("Inside initializePayment()");
+
+        Stripe.apiKey = secretKey;
+        Long orderId = paymentRequest.getOrderId();
+
         return null;
     }
 
