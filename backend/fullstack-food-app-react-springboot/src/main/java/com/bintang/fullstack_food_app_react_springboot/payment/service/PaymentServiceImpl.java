@@ -29,6 +29,9 @@ public class PaymentServiceImpl implements PaymentService{
     @Value("${stripe.api.secret.key}")
     private String secretKey;
 
+    @Value("${frontend.base.url}")
+    private String frontEndBaseUrl;
+
     @Override
     public Response<?> initializePayment(PaymentDto paymentDto) {
         return null;
