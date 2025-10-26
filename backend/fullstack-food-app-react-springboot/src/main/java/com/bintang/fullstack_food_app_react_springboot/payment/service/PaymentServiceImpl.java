@@ -2,6 +2,10 @@ package com.bintang.fullstack_food_app_react_springboot.payment.service;
 
 import com.bintang.fullstack_food_app_react_springboot.email_notification.entity.Notification;
 import com.bintang.fullstack_food_app_react_springboot.email_notification.services.NotificationService;
+import com.bintang.fullstack_food_app_react_springboot.enums.PaymentStatus;
+import com.bintang.fullstack_food_app_react_springboot.exceptions.BadRequestException;
+import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
+import com.bintang.fullstack_food_app_react_springboot.order.entity.Order;
 import com.bintang.fullstack_food_app_react_springboot.order.repository.OrderRepository;
 import com.bintang.fullstack_food_app_react_springboot.payment.dto.PaymentDto;
 import com.bintang.fullstack_food_app_react_springboot.payment.repository.PaymentRepository;
@@ -38,7 +42,15 @@ public class PaymentServiceImpl implements PaymentService{
         log.info("Inside initializePayment()");
 
         Stripe.apiKey = secretKey;
+
         Long orderId = paymentRequest.getOrderId();
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("Order not found"));
+
+        if(order.getPaymentStatus() == PaymentStatus.COMPLETED){
+            throw new BadRequestException("Payment is already completed for this order");
+        }
 
         return null;
     }
