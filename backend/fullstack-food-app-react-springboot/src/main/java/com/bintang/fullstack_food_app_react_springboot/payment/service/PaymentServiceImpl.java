@@ -52,6 +52,10 @@ public class PaymentServiceImpl implements PaymentService{
             throw new BadRequestException("Payment is already completed for this order");
         }
 
+        if(paymentRequest.getAmount() == null){
+            throw new BadRequestException("Amount you are passing in is null");
+        }
+
         return null;
     }
 
