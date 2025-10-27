@@ -2,12 +2,14 @@ package com.bintang.fullstack_food_app_react_springboot.payment.service;
 
 import com.bintang.fullstack_food_app_react_springboot.email_notification.entity.Notification;
 import com.bintang.fullstack_food_app_react_springboot.email_notification.services.NotificationService;
+import com.bintang.fullstack_food_app_react_springboot.enums.PaymentGateway;
 import com.bintang.fullstack_food_app_react_springboot.enums.PaymentStatus;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.BadRequestException;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.NotFoundException;
 import com.bintang.fullstack_food_app_react_springboot.order.entity.Order;
 import com.bintang.fullstack_food_app_react_springboot.order.repository.OrderRepository;
 import com.bintang.fullstack_food_app_react_springboot.payment.dto.PaymentDto;
+import com.bintang.fullstack_food_app_react_springboot.payment.entity.Payment;
 import com.bintang.fullstack_food_app_react_springboot.payment.repository.PaymentRepository;
 import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import com.stripe.Stripe;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -88,6 +91,27 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     public void updatePaymentForOrder(PaymentDto paymentDto) {
+
+        Long orderId = paymentDto.getOrderId();
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new NotFoundException("Order is not found"));
+
+        Payment payment = new Payment();
+        payment.setPaymentGateway(PaymentGateway.STRIPE);
+        payment.setAmount(paymentDto.getAmount());
+        payment.setTransactionId(paymentDto.getTransactionId());
+        payment.setPaymentStatus(paymentDto.isSuccess() ? PaymentStatus.COMPLETED : PaymentStatus.FAILED);
+        payment.setPaymentDate(LocalDateTime.now());
+        payment.setOrder(order);
+
+        if(!paymentDto.isSuccess()){
+            payment.setFailureReason(paymentDto.getFailureReason());
+        }
+
+        paymentRepository.save(payment);
+
+        // LANJUT LAGI
 
     }
 
