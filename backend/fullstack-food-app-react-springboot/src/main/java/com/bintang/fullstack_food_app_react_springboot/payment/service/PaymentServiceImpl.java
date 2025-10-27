@@ -56,6 +56,12 @@ public class PaymentServiceImpl implements PaymentService{
             throw new BadRequestException("Amount you are passing in is null");
         }
 
+        if(order.getTotalAmount().compareTo(paymentRequest.getAmount()) != 0){
+            throw new BadRequestException("Payment amount does not tally. Please contact our customer support agent");
+        }
+
+
+
         return null;
     }
 
