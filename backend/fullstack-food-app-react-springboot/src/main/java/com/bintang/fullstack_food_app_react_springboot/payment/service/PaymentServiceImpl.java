@@ -22,10 +22,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @Slf4j
@@ -111,7 +114,11 @@ public class PaymentServiceImpl implements PaymentService{
 
         paymentRepository.save(payment);
 
-        // LANJUT LAGI
+        Context context = new Context(Locale.getDefault());
+        context.setVariable("customerName", order.getUser().getName());
+        context.setVariable("orderId", order.getId());
+        context.setVariable("currentYear", Year.now().getValue());
+        context.setVariable("amount", "$"+paymentDto.getAmount());
 
     }
 
