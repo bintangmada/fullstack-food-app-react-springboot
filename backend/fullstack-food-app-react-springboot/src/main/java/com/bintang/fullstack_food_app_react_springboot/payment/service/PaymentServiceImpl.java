@@ -149,6 +149,14 @@ public class PaymentServiceImpl implements PaymentService {
             context.setVariable("failureReason", paymentDto.getFailureReason());
 
             String emailBody = templateEngine.process("payment-failed", context);
+
+            notificationService.sendEmail(NotificationDto
+                    .builder()
+                    .recipient(order.getUser().getEmail())
+                    .subject("Payment failed - Order #" + order.getId())
+                    .body(emailBody)
+                    .isHtml(true)
+                    .build());
         }
 
     }
