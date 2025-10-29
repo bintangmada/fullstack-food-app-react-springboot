@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -97,6 +98,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void updatePaymentForOrder(PaymentDto paymentDto) {
+        log.info("Inside updatePaymentForOrder()");
 
         Long orderId = paymentDto.getOrderId();
 
@@ -163,6 +165,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Response<List<PaymentDto>> getAllPayments() {
+        log.info("Inside getAllPayments()");
+
+        List<Payment> paymentList = paymentRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+
         return null;
     }
 
