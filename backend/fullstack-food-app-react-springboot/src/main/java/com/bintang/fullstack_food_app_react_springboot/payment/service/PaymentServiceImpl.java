@@ -20,6 +20,7 @@ import com.stripe.param.PaymentIntentCreateParams;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -168,6 +169,7 @@ public class PaymentServiceImpl implements PaymentService {
         log.info("Inside getAllPayments()");
 
         List<Payment> paymentList = paymentRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        List<PaymentDto> paymentDtoList = modelMapper.map(paymentList, new TypeToken<List<PaymentDto>>(){}.getType());
 
         return null;
     }
