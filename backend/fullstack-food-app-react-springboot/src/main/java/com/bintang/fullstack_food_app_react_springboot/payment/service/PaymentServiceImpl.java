@@ -1,7 +1,9 @@
 package com.bintang.fullstack_food_app_react_springboot.payment.service;
 
+import com.bintang.fullstack_food_app_react_springboot.email_notification.dtos.NotificationDto;
 import com.bintang.fullstack_food_app_react_springboot.email_notification.entity.Notification;
 import com.bintang.fullstack_food_app_react_springboot.email_notification.services.NotificationService;
+import com.bintang.fullstack_food_app_react_springboot.enums.OrderStatus;
 import com.bintang.fullstack_food_app_react_springboot.enums.PaymentGateway;
 import com.bintang.fullstack_food_app_react_springboot.enums.PaymentStatus;
 import com.bintang.fullstack_food_app_react_springboot.exceptions.BadRequestException;
@@ -27,13 +29,14 @@ import org.thymeleaf.context.Context;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class PaymentServiceImpl implements PaymentService{
+public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final NotificationService notificationService;
@@ -58,19 +61,19 @@ public class PaymentServiceImpl implements PaymentService{
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
 
-        if(order.getPaymentStatus() == PaymentStatus.COMPLETED){
+        if (order.getPaymentStatus() == PaymentStatus.COMPLETED) {
             throw new BadRequestException("Payment is already completed for this order");
         }
 
-        if(paymentRequest.getAmount() == null){
+        if (paymentRequest.getAmount() == null) {
             throw new BadRequestException("Amount you are passing in is null");
         }
 
-        if(order.getTotalAmount().compareTo(paymentRequest.getAmount()) != 0){
+        if (order.getTotalAmount().compareTo(paymentRequest.getAmount()) != 0) {
             throw new BadRequestException("Payment amount does not tally. Please contact our customer support agent");
         }
 
-        try{
+        try {
             PaymentIntentCreateParams params = PaymentIntentCreateParams
                     .builder()
                     .setAmount(paymentRequest.getAmount().multiply(BigDecimal.valueOf(100)).longValue())
@@ -86,7 +89,7 @@ public class PaymentServiceImpl implements PaymentService{
                     .message("success")
                     .data(uniqueTransactionId)
                     .build();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Error creating payment unique transaction id");
         }
 
@@ -108,7 +111,7 @@ public class PaymentServiceImpl implements PaymentService{
         payment.setPaymentDate(LocalDateTime.now());
         payment.setOrder(order);
 
-        if(!paymentDto.isSuccess()){
+        if (!paymentDto.isSuccess()) {
             payment.setFailureReason(paymentDto.getFailureReason());
         }
 
@@ -118,7 +121,35 @@ public class PaymentServiceImpl implements PaymentService{
         context.setVariable("customerName", order.getUser().getName());
         context.setVariable("orderId", order.getId());
         context.setVariable("currentYear", Year.now().getValue());
-        context.setVariable("amount", "$"+paymentDto.getAmount());
+        context.setVariable("amount", "$" + paymentDto.getAmount());
+
+        if (paymentDto.isSuccess()) {
+            order.setPaymentStatus(PaymentStatus.COMPLETED);
+            order.setOrderStatus(OrderStatus.CONFIRMED);
+            orderRepository.save(order);
+
+            context.setVariable("transactionId", paymentDto.getTransactionId());
+            context.setVariable("paymentDate", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MMM dd, yyyy hh:mm a")));
+            context.setVariable("frontendBaseUrl", this.frontEndBaseUrl);
+
+            String emailBody = templateEngine.process("payment-success", context);
+
+            notificationService.sendEmail(NotificationDto
+                    .builder()
+                    .recipient(order.getUser().getEmail())
+                    .subject("Payment successful - Order #" + order.getId())
+                    .body(emailBody)
+                    .isHtml(true)
+                    .build());
+        } else {
+            order.setPaymentStatus(PaymentStatus.FAILED);
+            order.setOrderStatus(OrderStatus.CANCELED);
+            orderRepository.save(order);
+
+            context.setVariable("failureReason", paymentDto.getFailureReason());
+
+            String emailBody = templateEngine.process("payment-failed", context);
+        }
 
     }
 
