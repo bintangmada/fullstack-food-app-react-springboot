@@ -185,6 +185,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Response<PaymentDto> getPaymentById(Long paymentId) {
+        log.info("Inside getPaymentById()");
+
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new NotFoundException("Payment is not found"));
+
         return null;
     }
 }
