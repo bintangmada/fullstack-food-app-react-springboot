@@ -6,10 +6,7 @@ import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -23,5 +20,8 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.initializePayment(paymentRequest));
     }
 
-
+    @PutMapping("/update")
+    public void updatePaymentForOrder(@RequestBody PaymentDto paymentRequest){
+        paymentService.updatePaymentForOrder(paymentRequest);
+    }
 }
