@@ -6,7 +6,10 @@ import com.bintang.fullstack_food_app_react_springboot.response.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -24,4 +27,12 @@ public class PaymentController {
     public void updatePaymentForOrder(@RequestBody PaymentDto paymentRequest){
         paymentService.updatePaymentForOrder(paymentRequest);
     }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Response<List<PaymentDto>>> getAllPayments(){
+        return ResponseEntity.ok(paymentService.getAllPayments());
+    }
+
+
 }
