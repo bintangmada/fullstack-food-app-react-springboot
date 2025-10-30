@@ -171,7 +171,16 @@ public class PaymentServiceImpl implements PaymentService {
         List<Payment> paymentList = paymentRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         List<PaymentDto> paymentDtoList = modelMapper.map(paymentList, new TypeToken<List<PaymentDto>>(){}.getType());
 
-        return null;
+        paymentDtoList.forEach(item -> {
+            item.setOrder(null);
+            item.setUser(null);
+        });
+
+        return Response.<List<PaymentDto>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Payments retrieved successfully by id")
+                .data(paymentDtoList)
+                .build();
     }
 
     @Override
