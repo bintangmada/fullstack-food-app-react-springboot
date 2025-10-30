@@ -185,6 +185,23 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Response<PaymentDto> getPaymentById(Long paymentId) {
-        return null;
+        log.info("Inside getPaymentById()");
+
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new NotFoundException("Payment is not found"));
+        PaymentDto paymentDto = modelMapper.map(payment, PaymentDto.class);
+
+        paymentDto.getUser().setRoles(null);
+        paymentDto.getOrder().setUser(null);
+        paymentDto.getOrder().getOrderItems().forEach(item ->{
+            item.getMenu().setReviews(null);
+        });
+
+        return Response.<PaymentDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Payment retrieved successfully by id")
+                .data(paymentDto)
+                .build();
+
     }
 }
