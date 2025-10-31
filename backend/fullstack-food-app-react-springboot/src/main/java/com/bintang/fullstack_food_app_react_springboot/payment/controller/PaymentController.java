@@ -39,3 +39,6 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.getPaymentById(paymentId));
     }
 }
+
+"chart.js,
+fontawesome, solid svg icons
