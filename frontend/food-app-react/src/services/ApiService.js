@@ -93,5 +93,14 @@ export default class ApiService {
         },
       }
     );
+    return response.data;
+  }
+
+  static async deacticeProfile() {
+    const response = await axios.delete(`${this.BASE_URL}/users/deactive`, {
+      headers: this.getHeader(),
+    });
+
+    return response.data;
   }
 }
