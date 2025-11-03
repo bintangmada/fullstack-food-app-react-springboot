@@ -21,4 +21,9 @@ export default class ApiService {
     const roles = localStorage.getItem("roles");
     return roles ? JSON.parse(roles) : null;
   }
+
+  static hadRole(role) {
+    const roles = this.getRoles();
+    return roles ? roles.includes(role) : false;
+  }
 }
