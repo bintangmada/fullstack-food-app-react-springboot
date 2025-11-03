@@ -38,4 +38,9 @@ export default class ApiService {
   static isDeliveryPerson() {
     return this.hadRole("DELIVERY");
   }
+
+  static logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("roles");
+  }
 }
