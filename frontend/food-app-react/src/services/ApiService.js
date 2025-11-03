@@ -65,4 +65,10 @@ export default class ApiService {
     );
     return response.data;
   }
+
+  // login user
+  static async loginUser(loginData) {
+    const response = await axios(`${this.BASE_URL}/auth/login`, loginData);
+    return response.data;
+  }
 }
