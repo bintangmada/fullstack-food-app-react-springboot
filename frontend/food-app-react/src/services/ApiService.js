@@ -43,4 +43,17 @@ export default class ApiService {
     localStorage.removeItem("token");
     localStorage.removeItem("roles");
   }
+
+  static isAuthenticated() {
+    const token = this.getToken();
+    return !!token;
+  }
+
+  static getHeader() {
+    const token = this.getToken();
+    return {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+  }
 }
