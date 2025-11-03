@@ -71,4 +71,27 @@ export default class ApiService {
     const response = await axios(`${this.BASE_URL}/auth/login`, loginData);
     return response.data;
   }
+
+  // USER
+
+  // get profile for this user
+  static async myProfile() {
+    const response = await axios.get(`${this.BASE_URL}/users/account`, {
+      headers: this.getHeader(),
+    });
+    return response.data;
+  }
+
+  static async updateProfile(formData) {
+    const response = await axios.put(
+      `${this.BASE_URL}/users/update`,
+      formData,
+      {
+        headers: {
+          ...this.getHeader(),
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+  }
 }
