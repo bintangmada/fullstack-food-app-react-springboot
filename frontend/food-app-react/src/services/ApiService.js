@@ -26,4 +26,16 @@ export default class ApiService {
     const roles = this.getRoles();
     return roles ? roles.includes(role) : false;
   }
+
+  static isAdmin() {
+    return this.hadRole("ADMIN");
+  }
+
+  static isCustomer() {
+    return this.hadRole("CUSTOMER");
+  }
+
+  static isDeliveryPerson() {
+    return this.hadRole("DELIVERY");
+  }
 }
