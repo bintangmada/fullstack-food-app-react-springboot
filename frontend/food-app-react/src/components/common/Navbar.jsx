@@ -9,7 +9,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    const isLogout = window.confirm("are you sure want to logout ? ");
+    const isLogout = window.confirm("Are you sure want to logout ? ");
     if (isLogout) {
       ApiService.logout();
       navigate("/login");
