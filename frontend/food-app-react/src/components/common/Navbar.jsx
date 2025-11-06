@@ -7,6 +7,14 @@ const Navbar = () => {
   const isCustomer = ApiService.isCustomer();
   const isDeliveryPerson = ApiService.isDeliveryPerson();
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    const isLogout = window.confirm("are you sure want to logout ? ");
+    if (isLogout) {
+      ApiService.logout();
+      navigate("/login");
+    }
+  };
 };
 
 export default Navbar;
