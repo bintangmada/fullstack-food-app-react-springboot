@@ -15,6 +15,12 @@ const Navbar = () => {
       navigate("/login");
     }
   };
+
+  return (
+    <nav>
+      <div></div>
+    </nav>
+  );
 };
 
 export default Navbar;
