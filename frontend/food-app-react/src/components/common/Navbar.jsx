@@ -18,7 +18,11 @@ const Navbar = () => {
 
   return (
     <nav>
-      <div></div>
+      <div className="logo">
+        <Link to="/" className="logo-link">
+          Food App
+        </Link>
+      </div>
     </nav>
   );
 };
