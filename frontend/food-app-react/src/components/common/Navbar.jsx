@@ -23,6 +23,10 @@ const Navbar = () => {
           Food App
         </Link>
       </div>
+
+      <div className="desktop-nav">
+        <Link to="/home">Home</Link>
+      </div>
     </nav>
   );
 };
