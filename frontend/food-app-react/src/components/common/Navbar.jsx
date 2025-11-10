@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ApiService from "../../services/ApiService";
 
 const Navbar = () => {
@@ -25,7 +25,52 @@ const Navbar = () => {
       </div>
 
       <div className="desktop-nav">
-        <Link to="/home">Home</Link>
+        <Link to="/home" className="nav-link">
+          Home
+        </Link>
+        <Link to="/menu" className="nav-link">
+          Menu
+        </Link>
+        <Link to="/categories" className="nav-link">
+          Categories
+        </Link>
+
+        {isAuthenticated ? (
+          <>
+            {isCustomer &&
+              ((
+                <Link to="/orders" className="nav-link">
+                  Orders
+                </Link>
+              ),
+              (
+                <Link to="/cart" className="nav-link">
+                  Chart
+                </Link>
+              ))}
+
+            {isDeliveryPerson && (
+              <Link to="/deliveries" className="nav-link">
+                Deliveries
+              </Link>
+            )}
+
+            {isAdmin && (
+              <Link to="/admin" className="nav-link">
+                Admin
+              </Link>
+            )}
+
+            <Link to="/profile" className="nav-link">
+              Profile
+            </Link>
+            <button className="nav-button" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </nav>
   );
