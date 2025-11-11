@@ -1,3 +1,21 @@
-const ErrorDisplay = () => {};
+const ErrorDisplay = ({ message, onDismiss }) => {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onDismiss?.();
+    }, 5000);
+  }, [message, onDismiss]);
+
+  if (!message) return null;
+
+  return (
+    <div className="error-display">
+      <div className="error-content">
+        <span className="error-message">{message}</span>
+        <span className="error-progress"></span>
+      </div>
+    </div>
+  );
+};
 
 export default ErrorDisplay;
