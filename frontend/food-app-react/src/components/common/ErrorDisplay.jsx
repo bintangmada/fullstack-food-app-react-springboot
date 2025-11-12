@@ -18,4 +18,8 @@ const ErrorDisplay = ({ message, onDismiss }) => {
   );
 };
 
+export const useError = () => {
+  const [errorMessage, setErrorMessage] = useState(null);
+};
+
 export default ErrorDisplay;
