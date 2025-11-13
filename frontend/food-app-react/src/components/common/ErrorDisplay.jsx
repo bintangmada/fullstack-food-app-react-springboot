@@ -20,6 +20,20 @@ const ErrorDisplay = ({ message, onDismiss }) => {
 
 export const useError = () => {
   const [errorMessage, setErrorMessage] = useState(null);
+  const showError = (message) => {
+    setErrorMessage(message);
+  };
+  const dismissError = () => {
+    setErrorMessage(null);
+  };
+
+  return {
+    ErrorDisplay: () => {
+      (<ErrorDisplay message={errorMessage} onDismiss={dismissError} />),
+        showError,
+        dismissError;
+    },
+  };
 };
 
 export default ErrorDisplay;
