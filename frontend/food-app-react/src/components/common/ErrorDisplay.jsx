@@ -28,11 +28,11 @@ export const useError = () => {
   };
 
   return {
-    ErrorDisplay: () => {
-      (<ErrorDisplay message={errorMessage} onDismiss={dismissError} />),
-        showError,
-        dismissError;
-    },
+    ErrorDisplay: () => (
+      <ErrorDisplay message={errorMessage} onDismiss={dismissError} />
+    ),
+    showError,
+    dismissError,
   };
 };
 
