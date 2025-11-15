@@ -6,6 +6,9 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
+      <div className="content">
+        <Routes>{/* <Route path="/home" element={<Home />} /> */}</Routes>
+      </div>
       <Footer />
     </BrowserRouter>
   );
