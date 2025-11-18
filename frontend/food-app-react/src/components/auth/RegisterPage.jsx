@@ -19,4 +19,19 @@ const handleChange = (e) => {
   setFormData({ ...formData, [e.target.name]: e.target.value });
 };
 
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (
+    !formData.name ||
+    !formData.email ||
+    !formData.password ||
+    !formData.phoneNumber ||
+    !formData.confirmPassword ||
+    !formData.address
+  ) {
+    showError("All fields are required");
+  }
+};
+
 export default RegisterPage;
