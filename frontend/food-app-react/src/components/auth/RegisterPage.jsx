@@ -31,6 +31,12 @@ const handleSubmit = async (e) => {
     !formData.address
   ) {
     showError("All fields are required");
+    return;
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    showError("Confirmed password does not match");
+    return;
   }
 };
 
