@@ -38,6 +38,8 @@ const handleSubmit = async (e) => {
     showError("Confirmed password does not match");
     return;
   }
+
+  const registrationData = {};
 };
 
 export default RegisterPage;
